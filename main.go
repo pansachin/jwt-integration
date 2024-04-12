@@ -32,6 +32,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Do i need to pass customer-secrets as audience? I believe not and passing "" will set pantheon as default audience
 	err = jwts.SignRequest(ctx, req, "")
 	if err != nil {
 		log.Fatal(err)
@@ -67,6 +68,7 @@ func read() {
 		log.Fatal(err)
 	}
 
+	// Do i need to pass customer-secrets as audience? I believe not and passing "" will set pantheon as default audience
 	err = jwts.SignRequest(ctx, req, "")
 	if err != nil {
 		log.Fatal(err)
