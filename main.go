@@ -18,7 +18,7 @@ func main() {
 
 	req, err := http.NewRequest(
 		"POST",
-		"https://api.pantheon.io:443/customer-secrets/v1/users/577adc84-4dc6-4149-b56e-ae3727395f44/secrets",
+		"https://customer-secrets-jwt.svc.pantheon.io/users/577adc84-4dc6-4149-b56e-ae3727395f44/secrets",
 		bytes.NewBuffer(jsondata),
 	)
 	if err != nil {
@@ -33,7 +33,7 @@ func main() {
 	}
 
 	// Do i need to pass customer-secrets as audience? I believe not and passing "" will set pantheon as default audience
-	err = jwts.SignRequest(ctx, req, "")
+	err = jwts.SignRequest(ctx, req, "customer-secrets")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,7 +55,7 @@ func read() {
 	ctx := context.Background()
 	req, err := http.NewRequest(
 		"GET",
-		"https://api.pantheon.io:443/customer-secrets/v1/users/577adc84-4dc6-4149-b56e-ae3727395f44/secrets/4832107511",
+		"https://customer-secrets-jwt.svc.pantheon.io/users/577adc84-4dc6-4149-b56e-ae3727395f44/secrets/4832107511",
 		nil,
 	)
 	if err != nil {
@@ -69,7 +69,7 @@ func read() {
 	}
 
 	// Do i need to pass customer-secrets as audience? I believe not and passing "" will set pantheon as default audience
-	err = jwts.SignRequest(ctx, req, "")
+	err = jwts.SignRequest(ctx, req, "customer-secrets")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,5 +82,8 @@ func read() {
 	}
 	defer resp.Body.Close()
 	fmt.Println("response Status:", resp.Status)
-	fmt.Printf("Response: %v\n", resp.Body)
+	// Read response body
+	var buf bytes.Buffer
+	buf.ReadFrom(resp.Body)
+	fmt.Printf("Response: %v\n", string(buf.Bytes()))
 }
